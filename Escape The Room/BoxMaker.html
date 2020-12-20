@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<head>
+	<meta charset="utf-8">
+	<style media="screen">
+	.resize {
+		font-size: 2vw;
+		text-align: center;
+	}
+
+	.room {
+		display: flex;
+		flex-direction: row;
+		max-width: 100%;
+		font-size: 2vw;
+		text-align: center;
+		background-size: 600px 1000px;
+		margin: auto;
+	}
+
+	.pic {
+		width: 100%;
+		height: 100vh;
+		margin: auto;
+		display: flex;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center center;
+		outline: 3px solid black;
+		outline-offset: -3px;
+	}
+
+	.centered {
+		justify-content: center;
+		align-items: center;
+		align-content: center;
+		margin: auto;
+	}
+
+	.clickme {
+		-webkit-transition-duration: 0.4s;
+		/* Safari */
+		transition-duration: 0.4s;
+		cursor: pointer;
+		display: flex;
+		border: 3px solid #008CBA;
+		color: white;
+		position: absolute;
+		font-size: 1.5vw;
+		width: 7.5%;
+		height: 7.5%;
+		top: 31.5%;
+		left: 49%;
+		border-radius: 10px;
+	}
+
+	.clickme:hover {
+		background-color: #008CBA;
+	}
+
+	.clickbox {
+		border: 1px solid black;
+		position: absolute;
+	}
+
+	body {
+		font-family: Arial, Helvetica, sans-serif;
+		margin: 0px;
+	}
+
+	.modal div div div span:hover {
+		color: white;
+		background-color: #008CBA;
+	}
+
+	/* The Modal (background) */
+
+	.modal {
+		display: none;
+		/* Hidden by default */
+		position: fixed;
+		/* Stay in place */
+		z-index: 1;
+		/* Sit on top */
+		text-align: center;
+		left: 0;
+		top: 0;
+		width: 100%;
+		/* Full width */
+		height: 100%;
+		/* Full height */
+		overflow: auto;
+		/* Enable scroll if needed */
+		background-color: rgb(0, 0, 0);
+		/* Fallback color */
+		background-color: rgba(0, 0, 0, 0.4);
+		/* Black w/ opacity */
+		-webkit-animation-name: fadeIn;
+		/* Fade in the background */
+		-webkit-animation-duration: 0.4s;
+		animation-name: fadeIn;
+		animation-duration: 0.4s
+	}
+
+	/* Modal Content */
+
+	.modal-content {
+		position: fixed;
+		bottom: 0;
+		background-color: #fefefe;
+		width: 100%;
+		-webkit-animation-name: slideIn;
+		-webkit-animation-duration: 0.4s;
+		animation-name: slideIn;
+		animation-duration: 0.4s
+	}
+
+	/* The Close Button */
+
+	.close {
+		color: white;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+
+	input {
+		padding: 12px 20px;
+		margin: 8px 0;
+		display: inline-block;
+		border: 1px solid #008CBA;
+		border-radius: 4px;
+		box-sizing: border-box;
+	}
+
+	button {
+		background-color: white;
+		color: black;
+		border: 2px solid #008CBA;
+	}
+
+	button:hover {
+		background-color: #008CBA;
+		color: white;
+	}
+
+	button {
+		border: 1px solid #008CBA;
+		color: black;
+		padding: 16px 32px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		margin: 4px 2px;
+		-webkit-transition-duration: 0.4s;
+		transition-duration: 0.4s;
+		cursor: pointer;
+	}
+
+
+	.close:hover,
+	.close:focus {
+		color: #000;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.modal-header {
+		padding: 2px 16px;
+		background-color: #008CBA;
+		color: white;
+	}
+
+	.modal-body {
+		padding: 2px 16px;
+	}
+
+	/* Add Animation */
+
+	@-webkit-keyframes slideIn {
+		from {
+			bottom: -300px;
+			opacity: 0
+		}
+		to {
+			bottom: 0;
+			opacity: 1
+		}
+	}
+  ::-moz-selection{
+  background-color:Transparent;
+  color:#000;
+  }
+
+  ::selection {
+  background-color:Transparent;
+  color:#000;
+  }
+.myclass::-moz-selection,
+.myclass::selection { ... }
+	@keyframes slideIn {
+		from {
+			bottom: -300px;
+			opacity: 0
+		}
+		to {
+			bottom: 0;
+			opacity: 1
+		}
+	}
+
+	.modal-footer {
+		padding: 2px 16px;
+		background-color: #008CBA;
+		color: white;
+	}
+
+	@-webkit-keyframes fadeIn {
+		from {
+			opacity: 0
+		}
+		to {
+			opacity: 1
+		}
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0
+		}
+		to {
+			opacity: 1
+		}
+	}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body onresize="">
+
+	<div class="room" style="position:relative; max-width:100%;">
+		<div class="clickme centered" id="myBtn">click me</div>
+	</div>
+	<div id="myModal" class="modal">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<br>
+			</div>
+			<div class="modal-body">
+				<h2 id="question"></h2>
+				<div class="options">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<br>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+	var optionsArr = {
+		0: ["uno", "dos", "tres"],
+		1: ["tres", "dos", "uno"]
+	};
+
+	var answerArr = ["tres", "uno"];
+	var questionArr = ["How do you spell 3 in spanish?", "How do you spell one in spanish?"]
+	var picturesArr = ["room1.jpg", "room.jpg"];
+	var popUpPicsArr = ["shoe.jpg"];
+
+	//
+	var room = document.getElementsByClassName("room")[0]
+	var question = document.getElementById("question");
+	var options = document.getElementsByClassName("options")[0];
+	var clickMe = document.getElementsByClassName("clickme")[0];
+	var dot = document.createElement("h3");
+
+	var oneClick = false;
+	var using = false;
+	var widthOne = 0;
+	var heightOne = 0;
+	var widthTwo = 0;
+	var heightTwo = 0;
+
+	var finalWidth, finalHeight;
+//function creates boxes with a set width and height and x, and y coordinates, and the english and spanish word that go with the item...
+	function makeBox(width, height, x, y, transWord, engWord) {
+		var clickBox = document.createElement("div");
+		clickBox.setAttribute("class", "clickbox centered");
+		clickBox.setAttribute("id", transWord);
+		clickBox.setAttribute("name", engWord);
+		//clickBox.setAttribute("onclick", "boxCheck(this)");// take out while creating boxes that run into each other
+		clickBox.setAttribute("ondblclick", "destroyElement(this)");
+		clickBox.setAttribute("style", "position:absolute;display:flex;width:" + width + "%;height:" + height + "%;left:" + x + "%;top:" + y + "%;");
+		room.appendChild(clickBox);
+		dragElement(clickBox);
+	}
+//allows click for box making
+	function printMousePos(event) {
+      if (using == false) {
+      if (oneClick == false) {
+				oneClick = true
+				dot.innerHTML = "*";
+				dot.setAttribute("style","position:absolute;left:"+(event.clientX-4)+"px;top:"+(event.clientY-24)+"px");
+				document.body.appendChild(dot)//adds dot where the first click is made
+				widthOne = (event.clientX / window.innerWidth) * 100;
+				heightOne = (event.clientY / window.innerHeight) * 100;
+				//gets screen size and width and height
+			} else if (oneClick == true) {
+				oneClick = false;
+				widthTwo = (event.clientX / window.innerWidth) * 100;
+				heightTwo = (event.clientY / window.innerHeight) * 100;
+				dot.innerHTML = "";
+			}
+			if (widthTwo > 0) {
+				//math for geting correct width and height
+				if (widthOne > widthTwo) {
+					finalWidth = widthOne - widthTwo;
+				} else {
+					finalWidth = widthTwo - widthOne;
+				}
+				if (heightOne > heightTwo) {
+					finalHeight = heightOne - heightTwo;
+				} else {
+					finalHeight = heightTwo - heightOne;
+				}
+				// get end and span word for the item in the box
+        var eng = prompt("Please write the English word for this Object!")
+        var span = prompt("Please write the Spanish word for this Object!")
+				if(finalWidth<.5){
+					finalWidth = .5
+				}
+				if(finalHeight<.5){
+					finalHeight = .5
+				}
+				//gets the screen location where the box was clicked at and makes it at that location
+				if(widthTwo>widthOne&&heightOne>heightTwo){
+				 makeBox(finalWidth, finalHeight, widthOne, heightTwo,span, eng)
+			 }else	if(widthTwo<widthOne&&heightOne>heightTwo){
+					makeBox(finalWidth, finalHeight, widthTwo, heightTwo,span, eng)
+				}else if(widthTwo<widthOne||heightTwo<heightOne){
+					makeBox(finalWidth, finalHeight, widthTwo, heightOne,span, eng)
+				}else {
+					makeBox(finalWidth, finalHeight, widthOne, heightOne,span, eng)
+				}
+				widthTwo = 0;
+        }
+			}
+      using = false;
+	}
+
+//allows for draggin the box W3 schools code
+	function dragElement(elmnt) {
+		var pos1 = 0,
+			pos2 = 0,
+			pos3 = 0,
+			pos4 = 0;
+
+		var set1,set2;
+		if (document.getElementById(elmnt.id + "header")) {
+			/* if present, the header is where you move the DIV from:*/
+			document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+		} else {
+			/* otherwise, move the DIV from anywhere inside the DIV:*/
+			elmnt.onmousedown = dragMouseDown;
+		}
+
+		function dragMouseDown(e) {
+      using = true;
+			e = e || window.event;
+			// get the mouse cursor position at startup:
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			document.onmouseup = closeDragElement;
+			// call a function whenever the cursor moves:
+			document.onmousemove = elementDrag;
+
+		}
+
+		function elementDrag(e) {
+			e = e || window.event;
+			// calculate the new cursor position:
+			pos1 = pos3 - e.clientX;
+			pos2 = pos4 - e.clientY;
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			// set the element's new position:
+			elmnt.style.top = ((elmnt.offsetTop - pos2)/window.innerHeight)*100+"%";
+			elmnt.style.left = ((elmnt.offsetLeft - pos1)/window.innerWidth)*100+"%";
+		}
+
+		function closeDragElement() {
+			/* stop moving when mouse button is released:*/
+			document.onmouseup = null;
+			document.onmousemove = null;
+		}
+	}
+
+	function setPic() {
+		var img = document.createElement("img");
+		img.src = "./" + picturesArr[0];
+		img.setAttribute("class", "pic");
+		room.appendChild(img);
+	}
+  function destroyElement(obj) {
+    obj.parentNode.removeChild(obj);
+    }
+	setPic()
+	document.addEventListener("click", printMousePos);
+	</script>
+</body>
+
+</html>

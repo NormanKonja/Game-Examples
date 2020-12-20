@@ -1,0 +1,137 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  flex-basis: auto;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: auto;
+  flex-wrap: wrap;
+  border: 1px solid black;
+}
+.container div{
+}
+* {
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+  box-sizing: border-box;
+  font-family: Ubuntu, sans-serif;
+}
+html {
+  background: -webkit-linear-gradient(100deg, #772953, #e95420);
+  background: linear-gradient(-10deg, #772953, #e95420);
+  min-height: 100vh;
+  font-size: 18px;
+}
+
+
+.container > * {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid #fff;
+  border-radius: 2px;
+  padding: 20px;
+  margin: 0px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  text-align: center;
+}
+
+.container > div:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.options-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: space-around;
+  align-content: space-around;
+  margin: auto;
+  flex-wrap: wrap;
+  flex-basis: auto;
+  text-align: center;
+  word-wrap: break-word;
+}
+.options-container div{
+    border: 1px solid black;
+    height:40px;
+    width: 100px;
+}
+@media only screen and (min-width:901px){
+  .container{
+    width:600px;
+  }
+  .options-container{
+    width:400px;
+  }
+  .container div{
+    height:150px;
+    width:150px;
+    line-height: 100px;
+  }
+}
+@media only screen and (max-width:900px){
+  .container{
+    width:480px;
+  }
+  .options-container{
+    width:480px;
+    justify-content: center;
+  }
+  .container div{
+    height:130px;
+    width:130px;
+    line-height: 70px;
+  }
+}
+@media only screen and (max-width:516px){
+  .container{
+    width:400px;
+  }
+  .options-container{
+    width:400px;
+  }
+  .container div{
+    height:110px;
+    width:110px;
+    line-height: 50px;
+  }
+}
+@media only screen and (max-width:416px){
+  .container{
+    width:335px;
+    height:100%;
+  }
+  .options-container{
+    width:335px;
+    align-content: center;
+  }
+  .container div{
+    height:90px;
+    width:90px;
+    line-height: 50px;
+  }
+}
+@media only screen and (max-width:366px){
+  .container{
+    width:280px;
+    height:100%;
+  }
+  .options-container{
+    width:280px;
+    align-content: center;
+    height:100px;
+  }
+  .options-container div{
+    width:70px;
+    align-content: center;
+    height:35px;
+  }
+  .container div{
+    height:70px;
+    width:70px;
+    line-height: 20px;
+  }
+}

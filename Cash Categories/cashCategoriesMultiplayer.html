@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style media="screen">
+
+	.game-background {
+		width: 100%;
+		display: flex;
+		position: absolute;
+		z-index: 0;
+		border: 1px solid blue;
+	}
+
+	.board {
+		display: flex;
+		border: 1px solid blue;
+		width: 59%;
+		z-index: 1;
+	}
+	.ops{
+		border-radius:10px;
+		width:35%;
+		margin:auto;
+		-webkit-transition-duration: 0.4s;
+		transition-duration: 0.4s;
+		cursor: pointer;
+		border: 3px solid #008CBA;
+		color: black;
+	}
+
+	.ops:hover{
+			background-color: #008CBA;
+	}
+
+	.rotate {
+		-ms-transform: rotate(-36deg);
+		/* IE 9 */
+		-webkit-transform: rotate(-36deg);
+		/* Safari 3-8 */
+		transform: rotate(-36deg);
+		width: 10%;
+		left: 32.25%;
+		color:white;
+		font-size: 3vh;
+		z-index: 5;
+		position: absolute;
+	}
+
+	.r1 {
+		top: 15%;
+		left: 33%;
+	}
+
+	.r2 {
+		top: 15%;
+		left: 38%;
+	}
+
+	.r3 {
+		top: 14.5%;
+		left: 43%;
+	}
+
+	.r4 {
+		top: 14.5%;
+		left: 48%;
+	}
+
+	.r5 {
+		top: 14%;
+		left: 53%;
+	}
+
+	.r6 {
+		top: 14%;
+		left: 58%;
+	}
+
+	.avatar {
+		width: 9%;
+		position: absolute;
+	}
+
+	*{
+	font-family: Ubuntu, sans-serif;
+	}
+
+	.box {
+		display: flex;
+		z-index: 1;
+		width: 25%;
+		height: 70%;
+		border-radius: 10px;
+	}
+
+	.display {
+		display: flex;
+		position: absolute;
+		background-color:rgba(155, 150, 128);
+		font-size: 3vh;
+		top: 23%;
+		flex-direction: column;
+		text-align: center;
+		left: 63.4%;
+		width: 8.25%;
+		height: 10%;
+		border-radius: 10px;
+	}
+
+	.clocktime{
+	font-family: 'Orbitron', sans-serif;
+	border-radius: 10px;
+	font-size: 4vw;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	}
+
+	.hover:hover {
+		border: 3px solid red;
+		border-radius: 10px;
+	}
+
+	.playerboxes {
+		display: flex;
+		align-content: center;
+		justify-content: space-between;
+		flex-direction: row;
+		align-items: center;
+		margin: auto;
+		top: 75%;
+		left: 25%;
+		position: absolute;
+		width: 45%;
+		height: 18%;
+		z-index: 1;
+	}
+
+	.balloon {
+		position: absolute;
+	}
+
+	.popuptext {
+		visibility: hidden;
+		display: flex;
+		flex-direction: column;
+		width: 30%;
+		height: 20%;
+		background-color: white;
+		color: #000;
+		text-align: center;
+		border-radius: 6px;
+		padding: 8px 0;
+		position: absolute;
+		z-index: 1;
+		bottom: 125%;
+		left: 50%;
+		margin-left: -80px;
+	}
+
+	/* Toggle this class - hide and show the popup */
+
+	.playerscores {
+		display: flex;
+		align-content: center;
+		justify-content: space-around;
+		flex-direction: row;
+		align-items: center;
+		text-align: center;
+		margin: auto;
+		top: 90%;
+		left: 25%;
+		position: absolute;
+		width: 45%;
+		height: 3%;
+		z-index: 1;
+	}
+
+	.score {
+		background-color:rgba(355, 355, 355, 0.65);
+		border-radius: 10px;
+		width: 15%;
+	}
+	.show {
+		visibility: visible;
+		-webkit-animation: fadeIn 1s;
+		animation: fadeIn 1s;
+	}
+
+	/* Add animation (fade in the popup) */
+
+	@-webkit-keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	</style>
+</head>
+
+<body>
+	<div class="game">
+		<img class="game-background" src="./game_background.png">
+		<div class="game-board">
+			<img style="position:absolute;top:3%;left:18%" class="board backboard" src="./board.png" alt="">
+			<link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+
+			<span class="r1 rotate">Science</span>
+			<span class="r2 rotate">English</span>
+			<span class="r3 rotate">this</span>
+			<span class="r4 rotate">that</span>
+			<span class="r5 rotate">those</span>
+			<span class="r6 rotate">rotate</span>
+			<img style="position:absolute;top:3%;left:18%" class="board board-structure" src="./structure.png" alt="">
+			<img style="top:3%;left:18%;position:absolute" class="board board-topcloth" src="./topcloth.png" alt="">
+			<img style="top:23%;left:32.98%;z-index:5;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:23%;left:37.98%;z-index:5;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:23%;left:42.98%;z-index:5;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:23%;left:47.98%;z-index:5;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:23%;left:52.98%;z-index:5;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:23%;left:57.98%;z-index:5;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:31.5%;left:32.98%;z-index:4;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:31.5%;left:37.98%;z-index:4;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:31.5%;left:42.98%;z-index:4;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:31.5%;left:47.98%;z-index:4;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:31.5%;left:52.98%;z-index:4;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:31.5%;left:57.98%;z-index:4;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:40%;left:32.98%;z-index:3;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:40%;left:37.98%;z-index:3;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:40%;left:42.98%;z-index:3;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:40%;left:47.98%;z-index:3;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:40%;left:52.98%;z-index:3;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:40%;left:57.98%;z-index:3;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:48.5%;left:32.98%;z-index:2;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:48.5%;left:37.98%;z-index:2;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:48.5%;left:42.98%;z-index:2;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:48.5%;left:47.98%;z-index:2;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:48.5%;left:52.98%;z-index:2;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:48.5%;left:57.98%;z-index:2;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:57%;left:32.98%;z-index:1;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:57%;left:37.98%;z-index:1;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:57%;left:42.98%;z-index:1;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:57%;left:47.98%;z-index:1;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:57%;left:52.98%;z-index:1;" class="balloon" src="./balloon.png" alt="">
+			<img style="top:57%;left:57.98%;z-index:1;" class="balloon" src="./balloon.png" alt="">
+			<img style="position:absolute;top:33%;left:63%;z-index:0;" class="avatar" src="./avatarbodyl.png" alt="">
+			<img style="position:absolute;top:32%;left:63%;z-index:0;" class="avatar" src="./avatarbodyu.png" alt="">
+			<div class="box display">
+
+			</div>
+			<div class="playerboxes">
+				<div class="box player1" style="text-align:center;">
+				</div>
+				<div class="box player2" style="">
+				</div>
+				<div class="box player3" style="">
+				</div>
+				<div class="box player4" style="">
+				</div>
+			</div>
+			<div class="playerscores">
+				<div id="player1score" class="score" style="font-size:20px">
+
+				</div>
+				<div id="player2score" class="score" style="font-size:20px">
+
+				</div>
+				<div id="player3score" class="score" style="font-size:20px">
+
+				</div>
+				<div id="player4score" class="score" style="font-size:20px">
+					player 4<br>0
+				</div>
+			</div>
+			<div id="saveGame" class="score" style="font-size:20px;position:absolute;left:66%;width:10%;top:5%;z-index:6;text-align:center" onclick="saveGame()">
+				Save Game
+			</div>
+		</div>
+		<div class="pregame">
+			<img style="position:absolute;top:33%;left:40%;z-index:0;" class="avatar startAvartar" src="./avatarbodyl.png" alt="">
+			<img style="position:absolute;top:32%;left:40%;z-index:0;" class="avatar startAvartar" src="./avatarbodyu.png" alt="">
+			<h3 style="z-index:0;position:absolute;top:58%;left:58%;" class="startSpan">Options</h3>
+			<span style="z-index:0;position:absolute;top:65%;left:58%;" class="startSpan" onclick="startNewGame()">New Game</span>
+			<span style="z-index:0;position:absolute;top:68%;left:58%;" class="startSpan" onclick="loadGame()">Load Game</span>
+		</div>
+	</div>
+	<script type="text/javascript">
+	var gameBoard = document.getElementsByClassName("game-board")[0]
+	gameBoard.style.display = 'none';
+
+	var pregame = document.getElementsByClassName("pregame")[0]
+	var header1 = document.getElementsByClassName("startSpan")[0]
+	var span1 = document.getElementsByClassName("startSpan")[1]
+	var span2 = document.getElementsByClassName("startSpan")[2]
+	var span3 = document.createElement("span")
+	var span4 = document.createElement("span")
+	var display = document.getElementsByClassName("display")[0]
+	var setPicked = false;
+	var timePicked = false;
+	var difficultyPicked = false;
+	var difficulty = "";
+	var characterPicked = false;
+	var time = 0;
+	var _5seconds = 5000;
+	var name = "";
+	var opponents = [];
+	var player1 = {};
+	var player2 = {};
+	var player3 = {};
+	var playersTurn = "";
+	var timeToPop = false;
+	var timeToBuzz = false;
+	var doneOnce = false;
+	var start = true;
+	var buzzedTime = 5000;
+	var buzzwatch = "";
+	var buzzTime = 16000;
+	var player1Buzzes = 0;
+	var player2Buzzes = 0;
+	var player1BuzzKey = "";
+	var player2BuzzKey = "";
+	var timerun = '';
+	var timeout = "";
+	var winner = "";
+	var displayTime = 2000;
+	var displayTimeout = 0;;
+	var displayOutOfTime = 0;
+	var pickedSet = "";
+	var randomQuestion = Math.floor(Math.random() * 4);
+	var opponentClickTime = 0;
+	var opponentCorrectness = 0;
+	var questionPopup = document.createElement("div")
+	questionPopup.setAttribute("class", "popuptext")
+	questionPopup.setAttribute("id", "mypopup")
+	gameBoard.appendChild(questionPopup)
+
+	function saveGame() {
+		var Json = {
+			pickedSet: pickedSet,
+			difficulty: difficulty,
+			time: time,
+			character: character,
+			players: {
+				player1: player1,
+				player2: player2,
+				player3: player3
+			},
+			playersTurn: playersTurn
+		}
+	}
+
+
+	function runTime() {//get game time and runs down when the game starts
+		time -= 1000;
+		timerun = setTimeout(runTime, 1000);
+		if (time <= 0 || (document.getElementsByClassName("balloon").length < 1 && timeToBuzz == false && playersTurn == undefined)) {
+			gameBoard.style.display = "none";
+			pregame.style.display = "none";
+			var span = document.createElement('span');
+			span.setAttribute("style", "font-size:4vh;position:absolute;left:45%;text-align:center")
+			var r = Math.floor(Math.random() * 3);//random number for the checks of the same scores below
+			if(player1["score"] ==  player2["score"] ){
+				if(r == 0){
+					var highestScore = Math.max(player1["score"], player3["score"]);
+				}else {
+					var highestScore = Math.max(player2["score"], player3["score"]);
+				}
+			}else if(player2["score"] == player3["score"]){
+				if(r == 0){
+					var highestScore = Math.max(player2["score"], player1["score"]);
+				}else {
+					var highestScore = Math.max(player3["score"], player1["score"]);
+				}
+			}else if(player1["score"] ==  player3["score"]){
+				if(r == 0){
+					var highestScore = Math.max(player1["score"], player2["score"]);
+				}else {
+					var highestScore = Math.max(player3["score"], player2["score"]);
+				}
+			}else if(player1["score"] ==  player2["score"] && player1["score"] == player3["score"]){
+				if(r == 0){
+					var highestScore = player1["score"]
+				}else if(r == 1){
+					var highestScore = player2["score"]
+				}else{
+					var highestScore = player3["score"]
+				}
+			}else{
+				var highestScore = Math.max(player1["score"],player2["score"], player3["score"]);
+			}
+
+			if (highestScore == player1["score"]) {
+				winner = player1;
+			} else if (highestScore == player2["score"]) {
+				winner = player2;
+			} else if (highestScore == player3["score"]) {
+				winner = player3;
+			}
+
+			timeToPop = false;
+			timeToBuzz = false;
+			span.innerHTML = "Game Over<br>" + winner["name"] + " Wins with " + winner["score"] + " points!";
+			document.body.appendChild(span)
+		}
+	}
+
+	var questionArr = {
+		math: {
+			questions: ["what is 2+2", "what is 6+4", "what is 8 * 8", "what is 5+2"],
+			correctAnswers: ["4", "10", "64", "7"],
+			optionArr: [
+				["1", "4", "5", "9"],
+				["9", "2", "1", "10"],
+				["64", "60", "62", "10"],
+				["20", "4", "7", "9"]
+			]
+		},
+		science: {
+			questions: ["what is a nuke made of?",
+				"what is waters compound name",
+				"who is albert einstein",
+				"what is air?"
+			],
+			correctAnswers: ["atoms", "h2o", "scientist", "oxygen"],
+			optionArr: [
+				["sugar", "atoms", "spice", "jod"],
+				["nono", "h20", "h2o", "ni"],
+				["farmer", "dk", "comedian", "scientist"],
+				["oxygen", "what you breathe", "good", "ls"]
+			]
+
+		}
+	}
+
+	function loadGame(file) {
+
+	}
+
+	function setPick(set) {//picks question category
+		if (set == "math") {
+			pickedSet = "math";
+		} else if (set == "science") {
+			pickedSet = "science";
+		}
+		setPicked = true;
+		startNewGame();
+	}
+
+	function timePick(minutes) {
+		time = minutes * 60000
+		timePicked = true;
+		runTime();
+		startNewGame();
+	}
+
+	function difficultyPick(diff) {
+		if (diff == "easy") {
+			opponentClickTime = (Math.floor(Math.random() * 11) + 5) * 1000;//gets anmount of timw bwfore the ai clicks
+			opponentCorrectness = Math.floor(Math.random() * 4) + 1;// odds of AI correctness
+			difficulty = "easy"
+		}
+		if (diff == "medium") {
+			opponentClickTime = (Math.floor(Math.random() * 11) + 2.5) * 1000;
+			opponentCorrectness = Math.floor(Math.random() * 3) + 2;
+			difficulty = "medium"
+		}
+		if (diff == "hard") {
+			opponentClickTime = (Math.floor(Math.random() * 5) + 2) * 1000;
+			opponentCorrectness = Math.floor(Math.random() * 2) + 3;
+			difficulty = "hard"
+		}
+		difficultyPicked = true;
+		if (timeToBuzz == false) {
+			startNewGame();
+		}
+	}
+
+	function characterPick(chrct) {
+		console.log(1);// creating players
+		player1 = {
+			domElem: document.getElementsByClassName("player1")[0],
+			score: 0,
+			name: player1Name,
+			character: "",
+			buzzedIn: false
+		}
+		player2 = {
+			domElem: document.getElementsByClassName("player2")[0],
+			score: 0,
+			name: player2Name,
+			character: "",
+			buzzedIn: false
+		}
+		player3 = {
+			domElem: document.getElementsByClassName("player3")[0],
+			score: 0,
+			name: "sarah",
+			character: "",
+			buzzedIn: false
+		}
+		if (chrct == "thisguy") {
+			player1["character"] = "./avatarbodyl.png"
+			player2["character"] = "./balloon.png";
+			player3["character"] = "./avatarbodyu.png"
+		} else if (chrct == "thatguy") {
+			player1["character"] = "./avatarbodyu.png";
+			player2["character"] = "./balloon.png";
+			player3["character"] = "./avatarbodyl.png";
+		} else if (chrct == "balloon") {
+			player1["character"] = "./balloon.png";
+			player2["character"] = "./avatarbodyu.png"
+			player3["character"] = "./avatarbodyl.png";
+		}
+		characterPicked = true;//gets characters
+		player1["domElem"].innerHTML += "<img src='" + player1["character"] + "' width='100%' style='z-index:5'/>";
+		player2["domElem"].innerHTML += "<img src='" + player2["character"] + "' width='100%' style='z-index:5'/>";
+		player3["domElem"].innerHTML += "<img src='" + player3["character"] + "' width='100%' style='z-index:5'/>";
+		for (var i = 0; i < document.getElementsByClassName("hover").length; i++) {
+			document.getElementsByClassName("hover")[i].style.display = "none";
+		}
+		for (var i = 0; i < document.getElementsByClassName("balloon").length; i++) {
+			document.getElementsByClassName("balloon")[i].setAttribute("onclick", "popBalloon(this)")
+		}
+
+		do {
+			do {
+				player1BuzzKey = prompt(player1Name + " What is your one button Buzz Key?");
+			} while (player1BuzzKey.length > 1 || player1BuzzKey.length < 1)
+			do {
+				player2BuzzKey = prompt(player2Name + " What is your one button Buzz Key?");
+			} while (player2BuzzKey.length > 1 || player2BuzzKey.length < 1)
+		} while (player1BuzzKey == player2BuzzKey)
+		document.body.setAttribute("onkeydown", "hit(event)")
+		startNewGame();
+	}
+
+	function hit(event) {
+		var key = event.key;
+		if (timeToBuzz == true && player1["buzzedIn"] == false) {
+			if (key.toLowerCase() == player1BuzzKey.toLowerCase()) {
+				buzzedIn(1)
+			}
+		}
+		if (timeToBuzz == true && player2["buzzedIn"] == false) {
+			if (key.toLowerCase() == player2BuzzKey.toLowerCase()) {
+				buzzedIn(2)
+			}
+		}
+	}
+
+	function buzzedIn(player) {
+		if (player == 1) {
+			player1Buzzes++;
+			playersTurn = player1;
+			player1["buzzedIn"] = true;
+		} else if (player == 2) {
+			player2Buzzes++;
+			playersTurn = player2;
+			player2["buzzedIn"] = true;
+		}
+		timeToBuzz = false;
+		clearTimeout(buzzwatch);
+		clearTimeout(timeout);
+		buzzedTime = 5000
+		buzzTimer()
+		displays("blue")
+		var option = questionArr[pickedSet]["optionArr"][randomQuestion]
+		questionPopup.innerHTML += "<br/>";
+		if (doneOnce == false) {
+			for (var i = 0; i < option.length; i++) {
+				var div = document.createElement("div");
+				div.setAttribute("class", "ops")
+				div.setAttribute("onclick", "clickedOption(this)")
+				div.innerHTML = option[i];
+				questionPopup.appendChild(div)
+			}
+		}
+	}
+
+	function buzzTimer() {
+		buzzedTime -= 1000;
+		buzzwatch = setTimeout(buzzTimer, 1000);
+		if (buzzedTime <= 0) {
+			clearTimeout(buzzwatch);
+			clickedOption("out of time")
+		}
+	}
+
+	function clickedOption(option) {
+		if (playersTurn != player3 && playersTurn != undefined && timeToBuzz == false) {
+			if (option.innerHTML == questionArr[pickedSet]["correctAnswers"][randomQuestion]) {
+				playersTurn["score"]++;
+				randomQuestion = Math.floor(Math.random() * 4);
+				console.log(playersTurn["score"]);
+				timeToPop = true;
+				buzzTime = 16000;
+				timeToBuzz = false;
+				playersTurn["buzzedIn"] = false;
+				doneOnce = false;
+				displays("green");
+				questionPopup.innerHTML = "";
+				display.innerHTML = "";
+				questionPopup.classList.toggle("show");
+				startNewGame();
+			} else {
+				timeToBuzz = true;
+				doneOnce = true;
+				if(option == "out of time"){
+				displayOutOfTime = "out of time";
+				}
+				playersTurn["buzzedIn"] = true;
+				displays("red");
+				display.removeAttribute("class")
+				displayTimer()
+			}
+		}
+	}
+
+	function displayTimer(){
+		clearTimeout(timeout)
+		displayTime -= 1000
+		display.setAttribute("class","display")
+		if (displayOutOfTime == "out of time") {
+			display.innerHTML = "Sorry Out Of Time"
+		} else {
+			display.innerHTML = "Incorrect"
+		}
+		displayTimeout = setTimeout(displayTimer,1000)
+		if(displayTime <= 0){
+			startNewGame();
+		}
+	}
+
+	function pickTime() {
+		header1.innerHTML = "How long do you want to Play?"
+		span1.innerHTML = "35 Minutes"
+		span1.setAttribute("onclick", "timePick(35)")
+		span2.innerHTML = "45 Minutes"
+		span2.setAttribute("onclick", "timePick(45)")
+		span3.innerHTML = "55 Minutes";
+		span3.setAttribute("onclick", "timePick(55)")
+		span3.setAttribute("style", "z-index:0;position:absolute;top:71%;left:58%;")
+		pregame.appendChild(span3);
+		span4.innerHTML = "unlimited time";
+		span4.setAttribute("style", "z-index:0;position:absolute;top:74%;left:58%;")
+		span4.setAttribute("onclick", "timePick(35000)");
+		pregame.appendChild(span4)
+	}
+
+	function pickDifficulty() {
+		header1.innerHTML = "What difficulty would you like?"
+		span1.innerHTML = "Easy"
+		span1.setAttribute("onclick", "difficultyPick('easy')")
+		span2.innerHTML = "Medium"
+		span2.setAttribute("onclick", "difficultyPick('medium')")
+		span3.innerHTML = "Hard";
+		span3.setAttribute("onclick", "difficultyPick('hard')")
+		span4.innerHTML = ""
+	}
+
+	function displays(color) {
+		if (playersTurn != undefined) {
+			if (color == "blue") {
+				playersTurn["domElem"].setAttribute("style", "border:2px solid blue;")
+			} else if (color == "black") {
+				playersTurn["domElem"].setAttribute("style", "border:1px solid black")
+			} else if (color == "red") {
+				playersTurn["domElem"].setAttribute("style", "border:2px solid red")
+			} else if (color == "green") {
+				playersTurn["domElem"].setAttribute("style", "border:2px solid green")
+			}
+		}
+	}
+
+	function pickCharacter() {
+		player1Name = prompt("Enter Your Name Player 1:");
+		player2Name = prompt("Enter Your Name Player 2:");
+		header1.innerHTML = "Choose a Character";
+		span1.innerHTML = "";
+		span2.innerHTML = "";
+		span3.innerHTML = "";
+		span4.innerHTML = "";
+		document.getElementsByClassName("startAvartar")[0].style.display = "none";
+		document.getElementsByClassName("startAvartar")[1].style.display = "none";
+
+		header1.setAttribute("style", "z-index:0;position:absolute;top:25%;left:45%");
+		var img1 = document.createElement("img");
+		img1.setAttribute("style", "position:absolute;top:33%;left:20%;z-index:0;width:9%")
+		img1.setAttribute("class", "hover")
+		img1.setAttribute("onclick", "characterPick('thatguy')")
+		img1.src = "./avatarbodyl.png"
+		pregame.appendChild(img1)
+		var img2 = document.createElement("img");
+		img2.setAttribute("style", "position:absolute;top:33%;left:70%;z-index:0;width:9%")
+		img2.setAttribute("class", "hover")
+		img2.setAttribute("onclick", "characterPick('thisguy')")
+		img2.src = "./avatarbodyu.png"
+		pregame.appendChild(img2)
+	}
+
+	function startNewGame() {
+		playersTurn = undefined;
+		displayOutOfTime = 0;
+		clearTimeout(displayTimeout)
+		displayTime = 2000
+		if (!setPicked) {
+			header1.innerHTML = "Choose a question set:"
+			span1.innerHTML = "Science"
+			span1.setAttribute("onclick", "setPick('science')")
+			span2.innerHTML = "Math"
+			span2.setAttribute("onclick", "setPick('math')")
+		} else if (!timePicked) {
+			pickTime();
+		} else if (!difficultyPicked) {
+			pickDifficulty();
+		} else if (!characterPicked) {
+			pickCharacter();
+		} else {
+			//var rand = Math.floor(Math.random() * 3)
+			// if(rand == 0){//if kris wants the computers to pop balloons too also for multiplayer
+			//   playersTurn = player1;
+			// }else if(rand == 1){
+			//   playersTurn = player2;
+			// }else if (rand == 2) {
+			//   playersTurn = player3;
+			// }
+			//playersTurn = player1;
+
+			document.getElementById("player1score").innerHTML = player1["name"]+"<br>"+player1["score"]
+			document.getElementById("player2score").innerHTML = player2["name"]+"<br>"+player2["score"]
+			document.getElementById("player3score").innerHTML = player3["name"]+"<br>"+player3["score"]
+			if (timeToBuzz == false) {
+				document.getElementsByClassName("game-board")[0].style.display = 'flex';
+				if (start == true) {
+					timeToPop = true;
+					start = false;
+				}
+			} else {
+				buzzTime -= 1000;
+				if (player1["buzzedIn"] == true && player2["buzzedIn"] == true && player3["buzzedIn"] == true) {
+					buzzTime = 0;
+				}
+				display.setAttribute("class","clocktime display")
+				display.innerHTML = (buzzTime / 1000);
+				console.log(buzzTime);
+				opponentClickTime -= 1000;
+				if (opponentClickTime <= 0 && player3["buzzedIn"] == false) {
+					timeToBuzz = false;
+					playersTurn = player3;
+					player3["buzzedIn"] = true
+					displays("blue")
+					if (playersTurn != undefined) {
+						opponentOptionPick();
+					} else if (playersTurn == undefined) {
+						timeout = setTimeout(startNewGame, 1000);
+					}
+				}
+				if (buzzTime <= 0) {
+					display.innerHTML = ""
+					clearTimeout(timeout);
+					randomQuestion = Math.floor(Math.random() * 4);
+					timeToPop = true;
+					timeToBuzz = false;
+					doneOnce = false;
+					buzzTime = 16000;
+					questionPopup.innerHTML = "";
+					questionPopup.classList.toggle("show");
+					difficultyPick(difficulty);
+				} else {
+					timeout = setTimeout(startNewGame, 1000);
+				}
+			}
+		}
+	}
+	//
+	function opponentOptionPick() {
+		_5seconds -= 1000;
+		clearTimeout(timeout)
+		if (_5seconds > 0) {
+			var timeout2 = setTimeout(opponentOptionPick, 1000);
+			var option = questionArr[pickedSet]["optionArr"][randomQuestion]
+			if (doneOnce == false) {
+				for (var i = 0; i < option.length; i++) {
+					var div = document.createElement("div");
+					div.setAttribute("class", "ops")
+					div.setAttribute("onclick", "clickedOption(this)")
+					div.innerHTML = option[i];
+					questionPopup.appendChild(div)
+				}
+				doneOnce = true;
+			}
+		} else {
+			_5seconds = 5000;
+			clearTimeout(timeout2)
+			if (opponentCorrectness == 4) {
+				playersTurn["score"]++;
+				randomQuestion = Math.floor(Math.random() * 4);
+				playersTurn["buzzedIn"] = false
+				timeToPop = true;
+				display.innerHTML = ""
+				buzzTime = 16000;
+				timeToBuzz = false;
+				doneOnce = false;
+				questionPopup.innerHTML = "";
+				questionPopup.classList.toggle("show");
+				displays("green")
+				difficultyPick(difficulty);
+			} else {
+				displays("red")
+				difficultyPick(difficulty);
+				timeout = setTimeout(startNewGame, 1000);
+				timeToBuzz = true;
+			}
+		}
+	}
+	// function waitPop(){
+	//
+	// }
+
+	function popBalloon(balloon) {
+		if (timeToPop == true) {
+			questionPopup.setAttribute("style", "position:absolute;left:38.65%;top:40%;z-index:" + (balloon.style.zIndex + 1))
+			balloon.parentNode.removeChild(balloon);
+			questionPopup.innerHTML = questionArr[pickedSet]["questions"][randomQuestion]
+			questionPopup.classList.toggle("show");
+			timeToBuzz = true;
+			timeToPop = false;
+			player1["domElem"].setAttribute("style", "border:0px solid black")
+			player2["domElem"].setAttribute("style", "border:0px solid black")
+			player3["domElem"].setAttribute("style", "border:0px solid black")
+			player1["buzzedIn"] = false
+			player2["buzzedIn"] = false
+			player3["buzzedIn"] = false
+			difficultyPick(difficulty);
+			startNewGame();
+		} else {
+
+		}
+	}
+	</script>
+</body>
+
+</html>

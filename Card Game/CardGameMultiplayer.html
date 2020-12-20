@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<head>
+	<style media="screen">
+	.container {
+		display: flex;
+		flex-direction: column;
+		flex-basis: auto;
+		justify-content: center;
+		align-items: center;
+		align-content: center;
+		margin: auto;
+		flex-wrap: wrap;
+		width: 1000px;
+		height: 640px;
+		max-width: 100%;
+		display: -webkit-box;
+		display: -moz-box;
+		display: -ms-flexbox;
+		display: -o-flexbox;
+		display: -webkit-flex;
+		-webkit-flex-direction: column;
+		-moz-flex-direction: column;
+		-ms-flex-direction: column;
+		-o-flex-direction: column;
+		flex-direction: column;
+	}
+
+	.sides {
+		display: flex;
+		width: 500px;
+		height: 640px;
+		justify-content: space-around;
+		margin: auto;
+		align-items: center;
+	}
+
+	.resize {
+		font-size: 1.75vw;
+		text-align: center;
+	}
+
+	* {
+		color: #fff;
+		text-shadow: 1px 1px 0 #000;
+		box-sizing: border-box;
+		font-family: Ubuntu, sans-serif;
+	}
+
+	html {
+		background: -webkit-linear-gradient(100deg, #772953, #e95420);
+		background: linear-gradient(-10deg, #772953, #e95420);
+		min-height: 100vh;
+		font-size: 16px;
+	}
+
+	.showBox {
+		display: flex;
+		margin: auto;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		width: 400px;
+		height: 400px;
+		color: black;
+		border: 4px solid black;
+		border-radius: 20px;
+		background-color: white;
+		font-size: 8vh;
+		text-align: center;
+	}
+
+	.game-display {
+		width: 400px;
+		display: flex;
+		height: 90px;
+		border: 4px solid black;
+		border-radius: 20px;
+		margin: auto;
+		align-items: center;
+		align-content: center;
+		justify-content: center;
+	}
+
+	.options {
+		display: flex;
+		width: 200px;
+		height: 30px;
+		border: 4px solid black;
+		border-radius: 20px;
+		margin: auto;
+		align-items: center;
+		align-content: center;
+		justify-content: center;
+	}
+	</style>
+</head>
+
+<body onresize="sizeCheck();">
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+
+	var mainObj = {
+		V1: {
+			id: 1,
+			eng: "this",
+			trans: "is",
+			audio: "./bubble.wav",
+			image: "./apple.png"
+		},
+		V2: {
+			id: 2,
+			eng: "that",
+			trans: "was",
+			audio: "./bubble.wav",
+			image: "./apple.png"
+		},
+		V3: {
+			id: 3,
+			eng: "you2",
+			trans: "tu2",
+			audio: "./bubble.wav",
+			image: "./apple.png"
+		},
+		V4: {
+			id: 4,
+			eng: "you3",
+			trans: "tu3",
+			audio: "./bubble.wav",
+			image: "./apple.png"
+		},
+		V5: {
+			id: 5,
+			eng: "you4",
+			trans: "tu4",
+			audio: "./bubble.wav",
+			image: "./apple.png"
+		},
+		V6: {
+			id: 6,
+			eng: "you5",
+			trans: "tu5",
+			audio: "./bubble.wav",
+			image: "./apple.png"
+		}
+	};
+	var mainObjRef = [];
+
+	//amount of possible answers(8 is the max)
+	do {
+		do {
+			var playerOne = prompt("Player One Enter Name: ");
+		}
+		while (playerOne.length < 1)
+		do {
+			var playerTwo = prompt("Player Two Enter Name: ");
+		}
+		while (playerTwo.length < 1)
+		if (playerOne.toLowerCase() == playerTwo.toLowerCase()) {
+			alert("Both Players Cant Have The Same Name!")
+		}
+	}
+	while (playerOne.toLowerCase() == playerTwo.toLowerCase())
+	do {
+		do {
+			var playerOneBuzzKey = prompt("Player One Enter Buzz Key(must be one character): ");
+		}
+		while (playerOneBuzzKey.length > 1 || playerOneBuzzKey.length < 1)
+		do {
+			var playerTwoBuzzKey = prompt("Player Two Enter Buzz Key(must be one character): ");
+		}
+		while (playerTwoBuzzKey.length > 1 || playerTwoBuzzKey.length < 1)
+		if (playerOneBuzzKey.toLowerCase() == playerTwoBuzzKey.toLowerCase()) {
+			alert("Both Player Can Not Have The Same Buzz Key!");
+		}
+	}
+	while (playerOneBuzzKey.toLowerCase() == playerTwoBuzzKey.toLowerCase())
+
+	var amountOfAnswers = 6;
+	var player = 0;
+	var playerOneScore = 0;
+	var playerTwoScore = 0;
+	var playerOneIncorrectScore = 0;
+	var playerTwoIncorrectScore = 0;
+  var playerOneBuzzes = 0;
+  var playerTwoBuzzes = 0;
+	var possibleQuestions = 4;
+	var time = ((6 * 10000) * 3)+1000;
+	var questionsMade = 0;
+	var clicked = false;
+	var amountOfTimeStart = 11000,
+		timeout;
+	var prevShowBox = 0;
+	var timerReset = 0;
+	var amountOfTime = 6000; //time declines by 10% for ever answer that is correct
+	var missMatched = {
+		PlayerOne: [],
+		PlayerTwo: []
+	};
+	var matched = {
+		PlayerOne: [],
+		PlayerTwo: []
+	};
+	var times = [0, 0];
+	var start = new Date(),
+		questionStart, elapsedTime;
+	var playerChanged = false;
+	var gameOver = false;
+	var useList = [0];
+	var teamSelected = 0;
+	var clickCheckForWrong = 0;
+	var type = "timed";
+	var picture = document.createElement("img");
+	var p = document.createElement("p");
+
+	var column = document.createElement("section");
+	column.setAttribute("class", "container resize");
+	column.setAttribute("id", "layout");
+	column.setAttribute("onresize", "autoSizeText()")
+	document.body.appendChild(column);
+	var showBox = document.createElement("div");
+	showBox.setAttribute("class", "container sides");
+	column.appendChild(showBox);
+	var playerScoreDisplay = document.createElement("span");
+	playerScoreDisplay.setAttribute("class", "game-display");
+	playerScoreDisplay.innerHTML = (playerOne + "'s Score: " + playerOneScore + " <br> " + playerTwo + "'s Score: " + playerTwoScore).toUpperCase();
+	showBox.appendChild(playerScoreDisplay);
+	var optionBox = document.createElement("div");
+	optionBox.setAttribute("class", "container sides");
+	column.appendChild(optionBox);
+	var showBoxDiv = document.createElement("div");
+	showBoxDiv.setAttribute("class", "showBox");
+	showBox.appendChild(showBoxDiv);
+	var timeDisplay = document.createElement("span");
+	timeDisplay.setAttribute("class", "options")
+	showBox.appendChild(timeDisplay);
+	document.body.setAttribute("onkeydown", "hit(event)");
+	var playerDisplay = document.createElement("span");
+	playerDisplay.setAttribute("class", "game-display");
+  var fullTime = 0;
+  function countDown() {
+  	if (type == "timed") {
+      time-=1000;
+      if(time<1){
+        gameOver = true;
+        displayStats();
+      }
+      fullTime = setTimeout(countDown,1000);
+  		playerDisplay.innerHTML = (playerOne + "'s Buzz Key: " + playerOneBuzzKey + " <br> " + playerTwo + "'s Buzz Key: " + playerTwoBuzzKey + "<br>Total Time Remaining: " + ((time/1000)).toFixed(0)).toUpperCase();
+  	} else if (type == "points") {
+  		playerDisplay.innerHTML = (playerOne + "'s Buzz Key: " + playerOneBuzzKey + " <br> " + playerTwo + "'s Buzz Key: " + playerTwoBuzzKey + "<br>Total Questions Remaining: " + (possibleQuestions - questionsMade)).toUpperCase();
+  	}
+  }
+  showBox.appendChild(playerDisplay);
+
+
+	var xLarge = window.matchMedia("(max-width:5000px) and (min-width: 751px)");
+	var large = window.matchMedia("(max-width: 750px) and (min-width:501px)");
+	var medium = window.matchMedia("(max-width: 500px) and (min-width:251px)");
+	var small = window.matchMedia("(max-width: 250px) and (min-width:0px)");
+
+	//populating main Arrays
+	function createObjects() {
+		for (var i = 1; i <= Object.keys(mainObj).length; i++) {
+			mainObjRef[i - 1] = mainObj["V" + i]["id"];
+			mainObjRef = shuffle(mainObjRef)
+		}
+	}
+
+	function shuffle(array) {
+		var currentIndex = array.length,
+			temporaryValue, randomIndex;
+		// While there remain elements to shuffle...
+		while (0 !== currentIndex) {
+			// Pick a remaining element...
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+			// And swap it with the current element.
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+		return array;
+	}
+	//functions for scaling screen size
+	function xLargeScreen(xLarge) {
+		if (xLarge.matches) {
+			easyWidth("width:70%", "width:70%", "width:40%", "width:70%", "");
+		}
+	}
+
+	function largeScreen(large) {
+		if (large.matches) {
+			easyWidth("width:70%", "width:70%", "width:40%", "width:70%", "width:70%;");
+		}
+	}
+
+	function mediumScreen(medium) {
+		if (medium.matches) {
+			easyWidth("width:70%", "width:70%", "width:40%", "width:70%", "width:70%;");
+		}
+	}
+
+	function smallScreen(small) {
+		if (small.matches) {
+			easyWidth("width:70%", "width:70%", "width:40%", "width:70%", "width:70%;");
+		}
+	}
+
+	function easyWidth(canvasWidth, optionWidth, optionSpanWidth, showBoxWidth, showBoxDivWidth) {
+		column.setAttribute("style", canvasWidth);
+		optionBox.setAttribute("style", optionWidth);
+		for (var i = 0; i < document.getElementsByClassName("options").length; i++) {
+			document.getElementsByClassName("options")[i].setAttribute("style", optionSpanWidth);
+		}
+		showBox.setAttribute("style", showBoxWidth);
+		showBoxDiv.setAttribute("style", showBoxDivWidth);
+		timeDisplay.setAttribute("Style", optionSpanWidth);
+		playerDisplay.setAttribute("Style", showBoxDivWidth);
+		playerScoreDisplay.setAttribute("Style", showBoxDivWidth);
+		picture.setAttribute("style", showBoxDivWidth);
+		p.setAttribute("style", showBoxDivWidth);
+	}
+
+	function callAll() {
+		xLargeScreen(xLarge);
+		xLarge.addListener(xLargeScreen);
+		largeScreen(large);
+		large.addListener(largeScreen);
+		mediumScreen(medium);
+		medium.addListener(mediumScreen);
+		smallScreen(small);
+		small.addListener(smallScreen);
+	}
+
+	//answer options may only be englsh or spanish answerType 1 is english 2 is spanish
+	function createGame(answerType) {
+
+		questionStart = new Date();
+		showBoxDiv.setAttribute("onclick", "");
+		showBoxDiv.innerHTML = "";
+		optionBox.innerHTML = "";
+		amountOfTimeStart = 11000;
+		amountOfTime = 6000;
+		player = 0;
+		playerChanged = false;
+		clickCheckForWrong = 0;
+		timerReset = 0;
+
+		do {
+			var random = Math.floor(Math.random() * 4) + 1; //random number from 1-4 not including the language number
+		} while (random == answerType); //1 is english 2 is spanish 3 is sound 4 is image
+		//making the object for the student to see or hear
+		if (random == 1) {
+			showBoxDiv.innerHTML = mainObj["V" + mainObjRef[0]]["eng"];
+		} else if (random == 2) {
+			showBoxDiv.innerHTML = mainObj["V" + mainObjRef[0]]["trans"];
+		} else if (random == 3) { //3 is sound
+			picture.src = "./audio.png";
+			showBoxDiv.appendChild(picture);
+			audio = new Audio(mainObj["V" + mainObjRef[0]]["audio"]);
+			showBoxDiv.setAttribute("onclick", "soundOut()");
+			p.innerHTML = "Click Me";
+			p.setAttribute("style", "color:black");
+			showBoxDiv.appendChild(p);
+		} else if (random == 4) { //4 is image
+			picture.src = mainObj["V" + mainObjRef[0]]["image"];
+			showBoxDiv.appendChild(picture);
+		}
+		if ((answerType == 1 && random == 4) || (answerType == 2 && random == 3)) { //checking that the sound and picture are not obvious for answers
+			if (answerType == 1) {
+				answerType++;
+			} else {
+				answerType--;
+			} //
+		}
+		//creating list for indexes to use including the answer index which is rand and checking make sure no indexes are repeated
+		var useList = [0];
+		for (var i = 1; i < amountOfAnswers; i++) {
+			var r = (Math.floor(Math.random() * amountOfAnswers));
+			if (!useList.includes(r)) {
+				useList[i] = r;
+			} else {
+				i--;
+			}
+		}
+		useList = shuffle(useList)
+		for (var i in useList) {
+			var optionBoxSpan = document.createElement("span");
+			optionBox.appendChild(optionBoxSpan);
+			optionBoxSpan.setAttribute("class", "options")
+			if (answerType == 1) {
+				optionBoxSpan.innerHTML = mainObj["V" + mainObjRef[useList[i]]]["eng"];
+			} else {
+				optionBoxSpan.innerHTML = mainObj["V" + mainObjRef[useList[i]]]["trans"];
+			}
+			if (useList[i] == 0) {
+				optionBoxSpan.setAttribute("onclick", "clickCheck('correct',this)");
+			} else {
+				optionBoxSpan.setAttribute("onclick", "clickCheck('incorrect',this)");
+			}
+			optionBoxSpan.style.display = "none";
+		}
+		mainObjRef = shuffle(mainObjRef);
+		useList = shuffle(useList);
+		clearTimeout(timeout);
+		buzzer();
+    countDown();
+		currentPlayer();
+		prevShowBox = showBoxDiv.innerHTML;
+    if (type == "timed" && time<1) {
+			gameOver = true;
+      displayStats();
+		} else if (type == "points" && questionsMade == possibleQuestions) {
+			gameOver = true;
+      displayStats();
+		}
+		questionsMade++;
+	}
+function displayStats(){
+  showBox.innerHTML = playerOne+" Stats<br><br>Correct Matches: <br>";
+  for(var i in matched["PlayerOne"]){
+    showBox.innerHTML += matched["PlayerOne"][i]+"<br>";
+  }
+  showBox.innerHTML += "<br>Incorrect Matches:<br>";
+  for(var i in missMatched["PlayerOne"]){
+    showBox.innerHTML += missMatched["PlayerOne"][i]+"<br>";
+  }
+  optionBox.innerHTML = playerTwo+" Stats<br><br>Correct Matches: <br>";
+  for(var i in matched["PlayerTwo"]){
+    optionBox.innerHTML += matched["PlayerTwo"][i]+"<br>";
+  }
+  optionBox.innerHTML += "<br>Incorrect Matches:<br>";
+  for(var i in missMatched["PlayerTwo"]){
+    optionBox.innerHTML += missMatched["PlayerTwo"][i]+"<br>";
+  }
+}
+	function buzzer() {
+		if (amountOfTimeStart < 1 && player == 0) {
+			player = (Math.floor(Math.random() * 2) + 1);
+			amountOfTimeStart = 11000;
+			clearTimeout(timeout);
+		}
+		if (player == 0) {
+			amountOfTimeStart -= 1000;
+			timeDisplay.innerHTML = "Time Left: " + (amountOfTimeStart / 1000);
+			timeout = setTimeout(buzzer, 1000);
+		} else if (player > 0) {
+			show()
+			amountOfTime -= 1000;
+			timeDisplay.innerHTML = "Time Left: " + (amountOfTime / 1000);
+			timeout = setTimeout(buzzer, 1000);
+
+			if (amountOfTime < 1) {
+				clearTimeout(timeout);
+				timerReset++;
+        if (timerReset == 1) {
+					amountOfTime = 6000;
+					if(playerChanged == false){
+						showBoxDiv.innerHTML = "Out of Time<br>";
+						if(player == 1){
+							player = 2;
+							playerChanged = true;
+							showBoxDiv.innerHTML += playerTwo+"'s Turn"
+						}else if (player == 2){
+							player = 1;
+							playerChanged = true;
+							showBoxDiv.innerHTML += playerOne+"'s Turn"
+						}
+						clearTimeout(fullTime)
+						setTimeout(function a(){
+							showBoxDiv.innerHTML = prevShowBox;
+							countDown();
+		          buzzer();
+						},1500);
+					}else if (playerChanged == true){
+	          buzzer();
+					}
+        }else if (timerReset == 2) {
+          //createGame(1)
+          showBoxState("Incorrect")
+        }
+			}
+		}
+		currentPlayer()
+	}
+
+	function hit(event) {
+		var key = event.key;
+		if (!clicked) {
+			if (key.toLowerCase() == playerOneBuzzKey.toLowerCase()) {
+				player = 1;
+				clicked = true;
+        playerOneBuzzes++;
+				console.log(player);
+			} else if (key.toLowerCase() == playerTwoBuzzKey.toLowerCase()) {
+				player = 2;
+				clicked = true;
+        playerTwoBuzzes++;
+				console.log(2);
+			}
+		}
+		currentPlayer()
+	}
+
+function showBoxState(state){
+    for(var i = 0 ; i < optionBox.childNodes.length;i++){
+      if(optionBox.childNodes[i].getAttribute("onclick") == "clickCheck('correct',this)"){
+        var answer = optionBox.childNodes[i].innerHTML;
+      }
+    }
+    optionBox.innerHTML = "";
+    if(state.toLowerCase() == "correct"){
+			var optionBoxSpan = document.createElement("span");
+      optionBoxSpan.setAttribute("class", "options")
+			optionBox.appendChild(optionBoxSpan);
+      optionBoxSpan.innerHTML = "Correct";
+    }else if (state.toLowerCase() == "incorrect"){
+      var optionBoxSpan = document.createElement("span");
+      optionBoxSpan.setAttribute("class", "options")
+			optionBox.appendChild(optionBoxSpan);
+      optionBoxSpan.innerHTML = "Incorrect";
+      var optionBoxSpanCorrect = document.createElement("span");
+      optionBoxSpanCorrect.setAttribute("class", "options")
+      optionBox.appendChild(optionBoxSpanCorrect);
+      optionBoxSpanCorrect.innerHTML = "Answer: "+answer;
+    }
+    var optionBoxSpanNext = document.createElement("span");
+    optionBox.appendChild(optionBoxSpanNext);
+    optionBoxSpanNext.setAttribute("class", "options")
+    optionBoxSpanNext.setAttribute("onclick", "createGame(1)")
+    optionBoxSpanNext.innerHTML = "NEXT QUESTION";
+    clearTimeout(timeout)
+    clearTimeout(fullTime)
+}
+
+function show() {
+    if(optionBox.childNodes[0]){
+		for (var i = 0; i < optionBox.childNodes.length; i++) {
+			optionBox.childNodes[i].style.display = "flex";
+		}
+  }
+}
+
+	function clickCheck(typeOfClick, html) {
+		elapsedTime = new Date() - questionStart;
+		if (clickCheckForWrong == 2) {
+			clickCheckForWrong = 0;
+			//createGame(1);
+      showBoxState("Incorrect")
+		}
+		if (typeOfClick == "correct") {
+			if (player == 1) {
+				times[0] = times[0] + elapsedTime;
+				playerOneScore++;
+				matched["PlayerOne"].push(["Question #: " + questionsMade.toString() + ", Selection: " + html.innerHTML + ", Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+				console.log(1);
+			} else if (player == 2) {
+				times[1] = times[1] + elapsedTime;
+				playerTwoScore++;
+				matched["PlayerTwo"].push(["Question #: " + questionsMade.toString() + ", Selection: " + html.innerHTML + ", Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+				console.log(2);
+			}
+			//createGame(1);
+      showBoxState("Correct")
+		} else if (typeOfClick == "incorrect") {
+			if (player == 1) {
+				times[0] = times[0] + elapsedTime;
+				playerOneIncorrectScore++;
+				missMatched["PlayerOne"].push(["Question #: " + questionsMade.toString() + ", Selection: " + html.innerHTML + ", Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+				console.log("wrong" + 1);
+				if (playerChanged == false) {
+					showBoxDiv.innerHTML = "Incorrect<br>Changing to "+playerTwo;
+					clearTimeout(fullTime);
+					clearTimeout(timeout);
+					setTimeout(function a(){
+						showBoxDiv.innerHTML = prevShowBox;
+						countDown();
+						buzzer();
+					},1500);
+					player = 2;
+					playerChanged = true;
+					amountOfTime = 0;
+					console.log("player 2 now");
+				} else if (playerChanged == true) {
+					//createGame(1)
+          showBoxState("Incorrect")
+				}
+				clickCheckForWrong++;
+			} else if (player == 2) {
+				times[1] = times[1] + elapsedTime;
+				playerTwoIncorrectScore++;
+				missMatched["PlayerTwo"].push(["Question #: " + questionsMade.toString() + ", Selection: " + html.innerHTML + ", Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+				console.log("wrong" + 2);
+				if (playerChanged == false) {
+					showBoxDiv.innerHTML = "Incorrect<br>Changing to "+playerOne;
+					clearTimeout(fullTime);
+					clearTimeout(timeout);
+					setTimeout(function a(){
+						showBoxDiv.innerHTML = prevShowBox;
+						buzzer();
+						countDown();
+					},1500);
+					player = 1;
+					playerChanged = true;
+					amountOfTime = 0;
+					console.log("player 1 now");
+				} else if (playerChanged == true) {
+					//createGame(1)
+          showBoxState("Incorrect")
+				}
+				clickCheckForWrong++;
+			}
+
+		}
+		currentPlayer();
+	}
+//make the button clickable after the question right or wrong
+	function currentPlayer() {
+		if (player == 1) {
+			playerScoreDisplay.innerHTML = (playerOne + "'S Turn<br>" + playerOne + "'s Score:" + playerOneScore + " <br> " + playerTwo + "'s Score:" + playerTwoScore).toUpperCase();;
+		} else if (player == 2) {
+			playerScoreDisplay.innerHTML = (playerTwo + "'S Turn<br>" + playerOne + "'s Score:" + playerOneScore + " <br> " + playerTwo + "'s Score:" + playerTwoScore).toUpperCase();;
+		} else {
+			playerScoreDisplay.innerHTML = (playerOne + "'s Score:" + playerOneScore + " <br> " + playerTwo + "'s Score:" + playerTwoScore).toUpperCase();;
+		}
+	}
+	//
+	// function correctClick(html,team) {
+	// 	elapsedTime = new Date() - questionStart;
+	// 	matched.push(["Question #: " + questionsMade.toString() + ", Selection: " + html.innerHTML + ", Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+	// 	score++;
+	// 	correct = 1;
+	// 	setTime();
+	// 	createGame(1);
+	// 	console.log("correct");
+	// }
+	//
+	// function incorrectClick(html,team) {
+	// 	elapsedTime = new Date() - questionStart;
+	// 	missMatched.push(["Question #: " + questionsMade.toString() + ", Selection: " + html.innerHTML + ", Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+	// 	incorrect = 1;
+	// 	incorrectScore++;
+	// 	setTime();
+	// 	console.log("incorrect");
+	// 	createGame(1);
+	// }
+	//
+	// function setTime() {
+	// 	clearTimeout(timeout);
+	// 	amountOfTimeStart *= 0.90;
+	// 	amountOfTime = amountOfTimeStart;
+	// 	if (amountOfTime < leastTime) {
+	// 		amountOfTime = leastTime;
+	// 	}
+	// }
+	//
+	// function check() {
+	// 	if (correct == 1) {
+	// 		correct = 0;
+	// 	}
+	// 	if (incorrect == 1) {
+	// 		incorrect = 0;
+	// 	}
+	// }
+	//both players HAVE KEY TO PRESS AND IF ONE TEAM GETS IT WRONG NEXT TEAM GETS A CHANCE TO ASNWER
+	//HIDE POSSIBLE ANSWERS UNTIL BUZZ IN 5 SECONDS TO ANSWER FROM BUZZING IN
+	//CHOOSE BETWEEN POINTS AND TIME
+	////
+	//NO ELIMINATION--MOST CORRECT FROM WHEN EVERYTHING IS SELECTED
+	//WINNER ANSWERS LAST // QUESTION:
+	//BACK AND FORTH QUESTIONS
+	///TEAM NAME OPTION
+	// IF TIED GO NY TIMER
+
+	// function minusSeconds() {
+	// 	amountOfTime -= 1000;
+	// 	timeDisplay.innerHTML = (amountOfTime / 1000).toFixed(0);
+	// 	if (amountOfTime > 0) {
+	// 		timeout = setTimeout(minusSeconds, 1000);
+	// 	} else {
+	// 		amountOfTimeStart *= 0.90;
+	// 		amountOfTime = amountOfTimeStart;
+	// 		if (amountOfTime < 7000) {
+	// 			amountOfTime = 7000;
+	// 		}
+	// 		incorrectScore++;
+	// 		elapsedTime = new Date() - questionStart;
+	// 		missMatched.push(["Question #: " + questionsMade.toString() + ", No Selection, Time Spent: " + (elapsedTime / 1000).toFixed(0) + " Seconds"]);
+	// 		createGame(1)
+	// 	}
+	// }
+
+	function soundOut() {
+		audio.play()
+	}
+
+	function sizeCheck() {
+		var vw = document.documentElement.clientWidth;
+		var vh = document.documentElement.clientHeight;
+
+		document.getElementById('layout').style.height = "calc(100vh)";
+	}
+
+	var autoSizeText = function() {
+		var el, elements, _i, _len, _results;
+		elements = $('.resize');
+		if (elements.length < 0) {
+			return;
+		}
+		_results = [];
+		for (_i = 0, _len = elements.length; _i < _len; _i++) {
+			el = elements[_i];
+			//console.log(el);
+			_results.push((function(el) {
+				var resizeText, _results1;
+				resizeText = function() {
+					var elNewFontSize;
+					elNewFontSize = (parseInt($(el).css('font-size').slice(0, -2)) - 1) + 'px';
+					return $(el).css('font-size', elNewFontSize);
+				};
+				_results1 = [];
+				//console.log(el.scrollHeight +' <> '+ el.offsetHeight);
+				//console.log(el.scrollWidth +' <> '+ el.offsetWidth);
+				while (el.scrollHeight > el.offsetHeight || el.scrollWidth > el.offsetWidth) {
+					_results1.push(resizeText());
+				}
+				return _results1;
+			})(el));
+		}
+		return _results;
+	};
+	callAll();
+	createObjects();
+	createGame(1);
+	</script>
+</body>
+
+</html>

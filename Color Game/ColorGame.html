@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+#box {
+	height: 150px;
+  width: 150px;
+  text-align: center;
+  border: 5px solid black;
+  font-size: 40px;
+	border-radius:50px;
+}
+p{
+	font-size: 40px;
+}
+</style>
+</head>
+<body>
+	<script>
+
+	function allowDrop(ev) {
+	    ev.preventDefault();
+	}
+
+	function drag(ev) {
+	    ev.dataTransfer.setData("text", ev.target.id);
+	}
+
+	function drop(ev) {
+	    ev.preventDefault();
+	    var data = ev.dataTransfer.getData("text");
+			var d = document.getElementById("message");
+			var f = document.createElement("P");
+			f.id = "f-id";
+			d.appendChild(f);
+			if(ev.target.className == data){
+				document.getElementById("f-id").innerHTML = "Good Answer";
+				ev.target.innerHTML = "";
+	    	ev.target.appendChild(document.getElementById(data));
+			} else {
+				document.getElementById("f-id").innerHTML = "Incorrect. Please Try Again!";
+			}
+		}
+	
+	function randomBoard(){
+		var colors = [];
+		colors['red'] = {label:'Red', color:'red', textcolor:'black'};
+		colors['yellow'] = {label:'Yellow', color:'yellow', textcolor:'black'};
+		colors['green'] = {label:'Green', color:'green', textcolor:'black'};
+		colors['blue'] = {label:'Blue', color:'blue', textcolor:'black'};
+		colors['orange'] = {label:'Orange', color:'orange', textcolor:'black'};
+		colors['purple'] = {label:'Purple', color:'purple', textcolor:'black'};
+		colors['white'] = {label:'White', color:'white', textcolor:'black'};
+		colors['black'] = {label:'Black', color:'black', textcolor:'white'};
+		colors['brown'] = {label:'Brown', color:'rgb(80,0,0)', textcolor:'white'};
+		console.log(colors);
+		
+		var allcolors = [];
+		for(var tcolor in colors){
+			allcolors.push(tcolor);
+		}
+		allcolors.sort(function(a, b){return 0.5 - Math.random()});
+		console.log(allcolors);
+		
+		var xpos = 0;
+		var boardstring = '';
+		for(var i=0; i<allcolors.length; i++){
+			var tcolor = allcolors[i];
+			if(xpos == 0){ boardstring += '<tr>'; }
+			boardstring += '<td id="box" class="'+tcolor+'" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:'+colors[tcolor]['color']+'; color:'+colors[tcolor]['textcolor']+'"> '+colors[tcolor]['label']+' </td>';
+			if(xpos == 2){ 
+				boardstring += '<tr>'; 
+				xpos = 0;
+			}else{
+				xpos++;
+			}
+		}
+		document.getElementById('board').innerHTML = boardstring;
+	}
+	</script>
+<table id="board" align='center'>
+	<tr>
+		<td id="box"  class="red" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:red;"> Red </td>
+		<td id="box"  class="yellow" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:yellow;"> Yellow </td>
+		<td id="box"  class="green" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:green;"> Green </td>
+	</tr>
+	<tr>
+		<td id="box"  class="blue" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:blue;"> Blue </td>
+		<td id="box"  class="orange" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:orange;"> Orange </td>
+		<td id="box"  class="purple" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:purple;"> Purple</td>
+	</tr>
+	<tr>
+		<td id="box"  class="white" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:white;"> White</td>
+		<td id="box"  class="black" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:black;color:white;"> Black </td>
+		<td id="box"  class="brown" ondrop="drop(event)" ondragover="allowDrop(event)" style="background-color:rgb(80,0,0);"> Brown </td>
+	</tr>
+
+</table>
+<div id="message" align="center"></div>
+	<table align="center">
+		<tr>
+			<td><p id="red" draggable="true" ondragstart="drag(event)">Rojo</p></td>
+			<td><p id="yellow" draggable="true" ondragstart="drag(event)">Amarillo</p></td>
+			<td><p id="green" draggable="true" ondragstart="drag(event)">Verde</p></td>
+		</tr>
+		<tr>
+			<td><p id="blue" draggable="true" ondragstart="drag(event)">Azul</p></td>
+			<td><p id="orange" draggable="true" ondragstart="drag(event)">Naranja</p></td>
+			<td><p id="purple" draggable="true" ondragstart="drag(event)">Púrpura</p></td>
+		</tr>
+		<tr>
+			<td><p id="white" draggable="true" ondragstart="drag(event)">Blanco</p></td>
+			<td><p id="black" draggable="true" ondragstart="drag(event)">Negro</p></td>
+			<td><p id="brown" draggable="true" ondragstart="drag(event)">Marrón</p></td>
+		</tr>
+	</table>
+</body>
+<script>
+	randomBoard();
+</script>
+</html>
