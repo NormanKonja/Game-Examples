@@ -1,0 +1,2 @@
+# Game-Examples
+This is a repository of games that I made at my previous job with Voces Digital. These games were meant to help children learn new languages.                   Since I'm not allowed to post the full, complete files for the games (for obvious reasons) I posted the files with the main logic and the foundation                   of the games right before I fully completed them for publishing. Feel free to skim through the codes to get an idea of my coding style and capabilities.
